@@ -46,7 +46,7 @@ class PmxbotHarness(object):
 				'from pmxbot.pmxbot import run; run()', configfile],)
 		except OSError:
 			py.test.skip("Unable to launch pmxbot (pmxbot must be installed)")
-		time.sleep(2)
+		time.sleep(5)
 		cls.client = TestingClient('localhost', 6668, 'testingbot')
 
 	def check_logs(cls, channel='', nick='', message=''):
@@ -72,7 +72,7 @@ class PmxbotHarness(object):
 
 	@classmethod
 	def teardown_class(cls):
-		if hasattr(cls, 'bot'):
+		if hasattr(cls, 'bot') and not cls.bot.poll():
 			cls.bot.terminate()
 			cls.bot.wait()
 		if hasattr(cls, 'server') and cls.server.poll() == None:

@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import itertools
 import urlparse
+import importlib
 
 from .classutil import itersubclasses
 
@@ -65,9 +66,12 @@ class MongoDBStorage(Storage):
 		return uri.startswith('mongodb:')
 
 	def __init__(self, host_uri):
-		# for now do a delayed import to avoid interfering with
-		# canonical logging module.
-		globals().update(pymongo=__import__('pymongo.objectid'))
+		pymongo = importlib.import_module('pymongo')
+		bson = importlib.import_module('bson')
+		globals().update(
+			pymongo=pymongo,
+			bson=bson,
+		)
 		self.db = pymongo.Connection(host_uri).pmxbot[self.collection_name]
 
 def migrate_all(source, dest):

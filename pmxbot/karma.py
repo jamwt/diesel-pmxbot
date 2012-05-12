@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import itertools
 import re
+import importlib
 
 from . import storage
 
@@ -229,7 +230,7 @@ def init_karma(uri):
 	Karma.store = Karma.from_URI(uri)
 	# for backward compatibility
 	globals().update(karma=Karma.store)
-	__import__('pmxbot.util').util.karma = Karma.store
+	importlib.import_module('pmxbot.util').karma = Karma.store
 
 
 # for backward compatibility:
